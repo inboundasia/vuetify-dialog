@@ -16,7 +16,12 @@
 </template>
 
 <script>
+import { VDialog } from 'vuetify'
+
 export default {
+  components: {
+    VDialog,
+  },
   name: 'AppDialog',
   directives: {
     DynamicEvents: {
