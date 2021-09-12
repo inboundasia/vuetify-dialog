@@ -6,13 +6,15 @@ export default class {
     this.dependency = dependency
   }
 
+  setDynamicModalContainer(root) {
+    this.root = root
+  }
+
   show(propsData) {
     const DialogComponent = Vue.extend(AppDialog)
     const instance = new DialogComponent({
-      parent: window.$nuxt.$root, // 將此元件的父實例指定為當前組件樹的Vue實例
-      ...this.dependency,
+      parent: this.root,
       propsData,
-      $dialog: this,
     }).$mount()
     document
       .querySelector('#__nuxt .v-application--wrap')
