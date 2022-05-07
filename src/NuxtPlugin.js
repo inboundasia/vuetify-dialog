@@ -8,7 +8,7 @@ const Plugin = {
       return
     }
 
-    const Manager = new DialogManager()
+    const Manager = new DialogManager(options)
 
     Object.defineProperty(Vue.prototype, '$dialog', {
       get: function () {

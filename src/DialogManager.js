@@ -2,8 +2,8 @@ import Vue from 'vue'
 import AppDialog from './AppDialog'
 
 export default class {
-  constructor(dependency) {
-    this.dependency = dependency
+  constructor(options) {
+    this.options = options
   }
 
   setDynamicModalContainer(root) {
@@ -17,7 +17,7 @@ export default class {
       propsData,
     }).$mount()
     document
-      .querySelector('#__nuxt .v-application--wrap')
+      .querySelector(this.options?.container || '#__nuxt .v-application--wrap')
       .appendChild(instance.$el)
     return instance
   }

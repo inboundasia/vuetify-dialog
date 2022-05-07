@@ -1948,7 +1948,7 @@ function _createClass(Constructor, protoProps, staticProps) {
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
 var external_commonjs_vue_commonjs2_vue_root_Vue_default = /*#__PURE__*/__webpack_require__.n(external_commonjs_vue_commonjs2_vue_root_Vue_);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"d2f15dee-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/AppDialog.vue?vue&type=template&id=960295f0&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"39a7bd62-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/AppDialog.vue?vue&type=template&id=960295f0&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.dialogVisible)?_c('div',{attrs:{"id":"__off-document__dialog"}},[_c('div',{staticClass:"v-iba-overlay v-iba-overlay--active theme--dark",staticStyle:{"z-index":"201"}},[_c('div',{staticClass:"v-iba-overlay__scrim",staticStyle:{"background-color":"rgb(33, 33, 33)","border-color":"rgb(33, 33, 33)"},style:({ opacity: _vm.overlayActive ? 0.46 : 0 })}),_c('div',{staticClass:"v-iba-overlay__content"})]),_c('div',{staticClass:"v-iba-dialog__content v-iba-dialog__content--active",staticStyle:{"z-index":"202"},attrs:{"role":"document","tabindex":"0"}},[_c('div',{staticClass:"v-iba-dialog v-iba-dialog--persistent",class:{ 'v-iba-dialog--active': _vm.contentActive },staticStyle:{"transform-origin":"center center","width":"425px"}},[_c(_vm.component,_vm._b({directives:[{name:"dynamic-events",rawName:"v-dynamic-events",value:(_vm.listeners),expression:"listeners"}],ref:"Component",tag:"component"},'component',_vm.props,false,true))],1)])]):_vm._e()}
 var staticRenderFns = []
 
@@ -2206,10 +2206,10 @@ var component = normalizeComponent(
 
 
 var DialogManager_default = /*#__PURE__*/function () {
-  function _default(dependency) {
+  function _default(options) {
     _classCallCheck(this, _default);
 
-    this.dependency = dependency;
+    this.options = options;
   }
 
   _createClass(_default, [{
@@ -2220,12 +2220,14 @@ var DialogManager_default = /*#__PURE__*/function () {
   }, {
     key: "show",
     value: function show(propsData) {
+      var _this$options;
+
       var DialogComponent = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend(AppDialog);
       var instance = new DialogComponent({
         parent: this.root,
         propsData: propsData
       }).$mount();
-      document.querySelector('#__nuxt .v-application--wrap').appendChild(instance.$el);
+      document.querySelector(((_this$options = this.options) === null || _this$options === void 0 ? void 0 : _this$options.container) || '#__nuxt .v-application--wrap').appendChild(instance.$el);
       return instance;
     }
   }]);
@@ -2246,7 +2248,7 @@ var Plugin = {
       return;
     }
 
-    var Manager = new DialogManager_default();
+    var Manager = new DialogManager_default(options);
     Object.defineProperty(Vue.prototype, '$dialog', {
       get: function get() {
         var caller = this;
