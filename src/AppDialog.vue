@@ -20,7 +20,7 @@
       <div
         class="v-iba-dialog v-iba-dialog--persistent"
         :class="{ 'v-iba-dialog--active': contentActive }"
-        style="transform-origin: center center; width: 425px"
+        :style="`transform-origin: center center; width: ${width}px`"
       >
         <component
           :is="component"
