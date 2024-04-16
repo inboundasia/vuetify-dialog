@@ -59,7 +59,7 @@ export default {
       default: '425',
     },
     component: {
-      type: [Function, Object],
+      type: [Function, Object, String],
       required: true,
     },
     props: {
