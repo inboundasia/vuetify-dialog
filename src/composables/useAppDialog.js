@@ -5,20 +5,24 @@ const components = ref([])
 const instances = ref([])
 
 export default function useAppDialog() {
+
+  function show({ props = {}, component, persistent, options }) {
+    const uuid = uuidv4()
+    components.value.push({
+      uuid,
+      component,
+      props,
+      persistent,
+      options,
+    })
+    return uuid
+  }
+
   return {
     components,
     instances,
-    show({ props = {}, component, persistent, options }) {
-      const uuid = uuidv4()
-      components.value.push({
-        uuid,
-        component,
-        props,
-        persistent,
-        options,
-      })
-      return uuid
-    },
+    show,
+    open: show, // alias
     async close(componentUuid) {
       if (componentUuid) {
         const index = components.value.findIndex(

@@ -9,7 +9,7 @@ export default defineConfig({
     lib: {
       entry: 'src/index.js',
       name: 'DigitSparkDrawer',
-      fileName: (format) => `digitspark-drawer.${format}.js`,
+      fileName: (format) => `digitspark-dialog.${format}.js`,
       formats: ['es', 'umd'], // Ensure both ES module and UMD builds
     },
     rollupOptions: {
