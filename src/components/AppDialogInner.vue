@@ -1,8 +1,8 @@
 <template>
-  <div v-if="dialogVisible" id="__off-document__dialog">
+  <div id="__off-document__dialog">
     <div
       class="v-iba-overlay v-iba-overlay--active theme--dark"
-      style="z-index: 201"
+      :style="{ 'z-index': $attrs.index + 1008 }"
     >
       <div
         class="v-iba-overlay__scrim"
@@ -15,95 +15,53 @@
       role="document"
       tabindex="0"
       class="v-iba-dialog__content v-iba-dialog__content--active"
-      style="z-index: 202"
+      :style="{ 'z-index': $attrs.index + 1009 }"
     >
       <div
         class="v-iba-dialog v-iba-dialog--persistent"
         :class="{ 'v-iba-dialog--active': contentActive }"
-        :style="`transform-origin: center center; width: ${width}px`"
+        style="transform-origin: center center; width: 425px"
       >
-        <component
-          :is="component"
-          ref="Component"
-          v-dynamic-events="listeners"
-          v-bind.sync="props"
-        />
+        <slot />
       </div>
-    </div>
+    </div> 
   </div>
 </template>
 
 <script>
 export default {
-  name: 'AppDialog',
-  directives: {
-    DynamicEvents: {
-      bind: (el, binding, vnode) => {
-        const allEvents = binding.value
-        if (allEvents) {
-          Object.keys(allEvents).forEach((event) => {
-            vnode.componentInstance.$on(event, (eventData) => {
-              const callback = allEvents[event]
-              if (callback) {
-                callback(eventData)
-              }
-            })
-          })
-        }
-      },
-    },
-  },
-  props: {
-    width: {
-      type: String,
-      default: '425',
-    },
-    component: {
-      type: [Function, Object, String],
-      required: true,
-    },
-    props: {
-      type: Object,
-      default: () => {
-        return {}
-      },
-    },
-    listeners: {
-      type: Object,
-      default: () => {
-        return {}
-      },
-    },
-  },
   data() {
     return {
-      dialogVisible: true,
       overlayActive: false,
       contentActive: false,
     }
   },
-  mounted() {
-    setTimeout(() => {
+  async mounted() {
+    await setTimeout(() => {
       this.overlayActive = true
       this.contentActive = true
-    }, 100)
+    }, this.animationDelay)
+
+    this.$emit('opened', this)
   },
   methods: {
-    close(...args) {
+    onOverlayClicked() {
+      if (!this.$attrs.persistent) {
+        this.close()
+      }
+    },
+    async close() {
       this.overlayActive = false
       this.contentActive = false
-      setTimeout(() => {
-        this.dialogVisible = false
-        this.$nextTick(() => {
-          this.$destroy()
-        })
-      }, 500)
+      await setTimeout(() => {
+        this.$emit('closed', this)
+      }, this.animationDelay)
     },
   },
 }
 </script>
 
-<style scoped>
+<style>
 .v-iba-overlay {
   align-items: center;
   border-radius: inherit;
@@ -147,6 +105,7 @@ export default {
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: 100%;
   z-index: inherit;
+  background-color: #fff;
   box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%),
     0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%);
 }
