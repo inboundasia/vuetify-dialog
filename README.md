@@ -1,6 +1,6 @@
 ## Installtion
 
-for vue 2: `npm install vuetify-drawer`
+for vue 2: `npm install vuetify-dialog`
 for vue 3: `npm install digitspark-dialog`
 
 # Local Dev
