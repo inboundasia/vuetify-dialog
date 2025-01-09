@@ -12,4 +12,4 @@ const install = (app) => {
 };
 
 // Export the component and install function
-export { AppDialog, AppDialogInner, useAppDialog };
+export default { AppDialog, AppDialogInner, useAppDialog };
