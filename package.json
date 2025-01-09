@@ -4,7 +4,7 @@
   "module": "dist/digitspark-dialog.es.js",
   "unpkg": "dist/digitspark-dialog.umd.js",
   "jsdelivr": "dist/digitspark-dialog.umd.js",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
