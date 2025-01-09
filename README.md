@@ -13,7 +13,7 @@ npm publish
 
 # Usages
 
-in your global layout add the component `AppDrawer`
+in your global layout add the component `AppDialog`
 
 ```
 <script setup>
@@ -33,11 +33,11 @@ in other component import the useAppDialog composable
 <script setup>
 import { useAppDialog } from 'digitspark-dialog'
 
-const $drawer = useAppDialog()
+const $dialog = useAppDialog()
 
 function doOpen() {
-  $drawer.open({
-    component: defineAsyncComponent(() => import('~/components/DrawerContent.vue'))
+  $dialog.open({
+    component: defineAsyncComponent(() => import('~/components/DialogContent.vue'))
   })
 }
 </script>
