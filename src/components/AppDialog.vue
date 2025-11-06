@@ -10,7 +10,7 @@
     >
       <component
         :is="{ ...component.component }"
-        v-bind.sync="component.props"
+        v-bind="component.props"
       />
     </AppDialogInner>
   </div>

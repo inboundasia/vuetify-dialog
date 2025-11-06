@@ -8,6 +8,7 @@
         class="v-iba-overlay__scrim"
         :style="{ opacity: overlayActive ? 0.46 : 0 }"
         style="background-color: rgb(33, 33, 33); border-color: rgb(33, 33, 33)"
+        @click="onOverlayClicked"
       ></div>
       <div class="v-iba-overlay__content"></div>
     </div>
@@ -24,7 +25,7 @@
       >
         <slot />
       </div>
-    </div> 
+    </div>
   </div>
 </template>
 

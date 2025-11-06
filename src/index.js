@@ -11,5 +11,6 @@ const install = (app) => {
   app.provide('useAppDialog', useAppDialog);
 };
 
-// Export the component and install function
+// Export named and default for flexibility
+export { AppDialog, AppDialogInner, useAppDialog };
 export default { AppDialog, AppDialogInner, useAppDialog };
