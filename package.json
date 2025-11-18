@@ -1,10 +1,10 @@
 {
-  "name": "@inboundasia/digitspark-dialog",
+  "name": "@inboundasia/vuetify-dialog",
   "main": "src/index.js",
   "module": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/inboundasia/digitspark-dialog"
+    "url": "https://github.com/inboundasia/vuetify-dialog"
   },
   "exports": {
     ".": {
