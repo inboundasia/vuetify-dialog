@@ -1,5 +1,5 @@
 {
-  "name": "digitspark-dialog",
+  "name": "@inboundasia/digitspark-dialog",
   "main": "src/index.js",
   "module": "src/index.js",
   "exports": {
