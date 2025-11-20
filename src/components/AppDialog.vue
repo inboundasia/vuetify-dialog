@@ -2,14 +2,14 @@
   <div id="__off-document__dialog">
     <AppDialogInner
       v-for="(component, index) in components"
-      :key="index"
+      :key="component.uuid"
       :index="index"
-      :persistent="component.persistent || true"
+      :persistent="component.persistent !== false"
       @opened="(vNode) => onOpened(vNode, component)"
       @closed="(vNode) => onClosed(vNode, component)"
     >
       <component
-        :is="{ ...component.component }"
+        :is="component.component"
         v-bind="component.props"
       />
     </AppDialogInner>
