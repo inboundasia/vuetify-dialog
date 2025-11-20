@@ -63,6 +63,11 @@ export default {
     // Watch for theme changes
     this.watchTheme()
 
+    // Re-detect theme after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      this.detectTheme()
+    }, 100)
+
     // Use nextTick to ensure DOM is ready, then trigger animation
     this.$nextTick(() => {
       setTimeout(() => {
@@ -91,59 +96,59 @@ export default {
       try {
         if (typeof window === 'undefined') return
 
-        // Method 1: Check Vuetify theme via getCurrentInstance (Vue 3)
-        try {
-          const instance = getCurrentInstance()
-          if (instance) {
-            const vuetify = instance.appContext.config.globalProperties.$vuetify
-            if (vuetify?.theme?.global?.name) {
-              const themeName = typeof vuetify.theme.global.name === 'object'
-                ? vuetify.theme.global.name.value
-                : vuetify.theme.global.name
-              this.isDark = themeName === 'dark'
-              return
-            }
-          }
-        } catch (e) {
-          // Continue to next method
-        }
-
-        // Method 2: Check document class (Vuetify adds v-theme--dark)
         const html = document.documentElement
+        const oldIsDark = this.isDark
+
+        // Method 1: Check document class (Vuetify adds v-theme--dark) - Most reliable
         if (html.classList.contains('v-theme--dark')) {
           this.isDark = true
-          return
-        }
-        if (html.classList.contains('v-theme--light')) {
+        } else if (html.classList.contains('v-theme--light')) {
           this.isDark = false
-          return
+        }
+        // Method 2: Check data attribute
+        else {
+          const themeAttr = html.getAttribute('data-v-theme')
+          if (themeAttr === 'dark') {
+            this.isDark = true
+          } else if (themeAttr === 'light') {
+            this.isDark = false
+          }
+          // Method 3: Check for dark class
+          else if (html.classList.contains('dark') || document.body.classList.contains('dark')) {
+            this.isDark = true
+          }
+          // Method 4: Try to get from Vuetify instance
+          else {
+            try {
+              const instance = getCurrentInstance()
+              if (instance) {
+                const vuetify = instance.appContext?.config?.globalProperties?.$vuetify
+                if (vuetify?.theme?.global?.name) {
+                  const themeName = typeof vuetify.theme.global.name === 'object'
+                    ? vuetify.theme.global.name.value
+                    : vuetify.theme.global.name
+                  this.isDark = themeName === 'dark'
+                }
+              }
+            } catch (e) {
+              // Continue to next method
+            }
+          }
         }
 
-        // Method 3: Check data attribute
-        const themeAttr = html.getAttribute('data-v-theme')
-        if (themeAttr === 'dark') {
-          this.isDark = true
-          return
-        }
-        if (themeAttr === 'light') {
-          this.isDark = false
-          return
+        // Method 5: Check prefers-color-scheme (last resort, only if not set)
+        if (this.isDark === oldIsDark && !html.classList.contains('v-theme--dark') && !html.classList.contains('v-theme--light')) {
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            this.isDark = true
+          } else {
+            this.isDark = false
+          }
         }
 
-        // Method 4: Check for dark class
-        if (html.classList.contains('dark') || document.body.classList.contains('dark')) {
-          this.isDark = true
-          return
+        // Force reactivity update if changed
+        if (oldIsDark !== this.isDark) {
+          this.$forceUpdate()
         }
-
-        // Method 5: Check prefers-color-scheme (last resort)
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          this.isDark = true
-          return
-        }
-
-        // Default to light
-        this.isDark = false
       } catch (e) {
         // Silently fail and use default
         console.debug('Could not detect theme:', e)
@@ -154,15 +159,30 @@ export default {
       if (typeof window === 'undefined') return
 
       // Watch for Vuetify theme changes via MutationObserver
-      this.themeObserver = new MutationObserver(() => {
-        this.detectTheme()
+      this.themeObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' &&
+              (mutation.attributeName === 'class' || mutation.attributeName === 'data-v-theme')) {
+            this.detectTheme()
+          }
+        })
       })
 
       // Observe html element for class changes
       if (document.documentElement) {
         this.themeObserver.observe(document.documentElement, {
           attributes: true,
-          attributeFilter: ['class', 'data-v-theme']
+          attributeFilter: ['class', 'data-v-theme'],
+          subtree: false
+        })
+      }
+
+      // Also observe body for dark class
+      if (document.body) {
+        this.themeObserver.observe(document.body, {
+          attributes: true,
+          attributeFilter: ['class'],
+          subtree: false
         })
       }
 
