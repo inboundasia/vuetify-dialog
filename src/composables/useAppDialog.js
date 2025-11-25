@@ -21,36 +21,41 @@ function generateUUID() {
   })
 }
 
+function show({ props = {}, component, persistent, options }) {
+  const uuid = generateUUID()
+  components.value.push({
+    uuid,
+    component: markRaw(component),
+    props,
+    persistent,
+    options,
+  })
+  return uuid
+}
+
+async function close(componentUuid) {
+  if (componentUuid) {
+    const index = components.value.findIndex(
+      (component) => component.uuid === componentUuid
+    )
+    if (index !== -1) {
+      await instances.value[index].close()
+    }
+  } else {
+    await instances.value[instances.value.length - 1].close()
+  }
+}
+
+// Create singleton instance
+const dialogInstance = {
+  components,
+  instances,
+  show,
+  open: show, // alias
+  close,
+}
+
 export default function useAppDialog() {
-
-  function show({ props = {}, component, persistent, options }) {
-    const uuid = generateUUID()
-    components.value.push({
-      uuid,
-      component: markRaw(component),
-      props,
-      persistent,
-      options,
-    })
-    return uuid
-  }
-
-  return {
-    components,
-    instances,
-    show,
-    open: show, // alias
-    async close(componentUuid) {
-      if (componentUuid) {
-        const index = components.value.findIndex(
-          (component) => component.uuid === componentUuid
-        )
-        if (index !== -1) {
-          await instances.value[index].close()
-        }
-      } else {
-        await instances.value[instances.value.length - 1].close()
-      }
-    },
-  }
+  // Always return the same singleton instance
+  return dialogInstance
 }

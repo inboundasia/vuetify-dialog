@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.js',
-      name: 'DigitSparkDrawer',
+      name: 'DigitSparkDialog',
       fileName: (format) => `digitspark-dialog.${format}.js`,
       formats: ['es', 'umd'], // Ensure both ES module and UMD builds
     },
