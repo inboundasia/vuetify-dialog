@@ -49,6 +49,15 @@ function getOrCreateInstance() {
             await instances.value[index].close()
           }
         } else {
+          if (instances.value.length > 0) {
+            await instances.value[instances.value.length - 1].close()
+          }
+        }
+      }
+
+      /** 關閉所有 dialogs（用於巢狀 dialog 需一次關閉全部時） */
+      async function closeAll() {
+        while (instances.value.length > 0) {
           await instances.value[instances.value.length - 1].close()
         }
       }
@@ -59,6 +68,7 @@ function getOrCreateInstance() {
         show,
         open: show, // alias
         close,
+        closeAll,
       }
     }
     return window[GLOBAL_KEY]
@@ -101,6 +111,14 @@ function getOrCreateInstance() {
           await instances.value[index].close()
         }
       } else {
+        if (instances.value.length > 0) {
+          await instances.value[instances.value.length - 1].close()
+        }
+      }
+    }
+
+    async function closeAll() {
+      while (instances.value.length > 0) {
         await instances.value[instances.value.length - 1].close()
       }
     }
@@ -111,6 +129,7 @@ function getOrCreateInstance() {
       show,
       open: show,
       close,
+      closeAll,
     }
   }
   return getOrCreateInstance._instance

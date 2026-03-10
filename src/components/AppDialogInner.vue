@@ -217,9 +217,12 @@ export default {
     close() {
       this.overlayActive = false
       this.contentActive = false
-      setTimeout(() => {
-        this.$emit('closed', this)
-      }, this.animationDelay)
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          this.$emit('closed', this)
+          resolve()
+        }, this.animationDelay)
+      })
     },
   },
 }
